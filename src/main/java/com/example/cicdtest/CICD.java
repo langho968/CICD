@@ -7,5 +7,4 @@ public class CICD {
     private  String test;
     private  String ci;
     private String cd;
-    private String S3;
 }
