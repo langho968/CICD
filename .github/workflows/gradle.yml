@@ -57,4 +57,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: aws deploy create-deployment --application-name mulmul-deploy-test --deployment-group-name mulmul-deploy-test-group --file-exists-behavior OVERWRITE --s3-location bucket=mulmul,bundleType=zip,key=springboot-intro-build.zip --region ap-northeast-2
+        run: aws deploy create-deployment --application-name mulmul --deployment-group-name mulmul --file-exists-behavior OVERWRITE --s3-location bucket=mulmul,bundleType=zip,key=springboot-intro-build.zip --region ap-northeast-2
