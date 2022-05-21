@@ -3,6 +3,7 @@ os: linux
 files:
   - source: / # CodeDeploy에서 전달해 준 파일 중 destination으로 이동시킬 대상 지정 ('/' 루트 파일은 전체파일을 의미)
     destination: /home/ubuntu/hanghae/deploy # source에서 지정된 파일을 받을 위치
+    overwrite: yes
 
 permissions:
   - object: /
@@ -10,16 +11,17 @@ permissions:
     owner: ubuntu
     group: ubuntu
 
+## 새로 추가한 부분 ###
 hooks:
-  AfterInstall:
-    - location: stop.sh # 엔진엑스와 연결되어 있지 않은 스프링 부트를 종료합니다.
-      timeout: 60
-      runas: ubuntu
   ApplicationStart:
-    - location: start.sh # 엔진엑스와 연결되어 있지 않은 Port로 새 버전의 스프링 부트를 시작합니다.
-      timeout: 100
+    - location: scripts/start.sh
+      timeout: 180
       runas: ubuntu
-  ValidateService:
-    - location: health.sh # 새 스프링 부트가 정상적으로 실행됐는지 확인 합니다.
-      timeout: 60
+
+    - location: scripts/health_check.sh
+      timeout: 180
+      runas: ubuntu
+
+    - location: scripts/switch.sh
+      timeout: 180
       runas: ubuntu
