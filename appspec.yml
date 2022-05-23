@@ -14,14 +14,14 @@ permissions:
 ## 새로 추가한 부분 ###
 hooks:
   ApplicationStart:
-    - location: scripts/start.sh
+    - location: start.sh
       timeout: 180
       runas: ubuntu
 
-    - location: scripts/health_check.sh
+    - location: health_check.sh
       timeout: 180
       runas: ubuntu
 
-    - location: scripts/switch.sh
+    - location: switch.sh
       timeout: 180
       runas: ubuntu

@@ -1,26 +1,31 @@
-# start.sh
-# !/bin/bash
+#!/usr/bin/env bash
+ABSPATH=$(readlink -f $0)
+ABSDIR=$(dirname $ABSPATH)
+source ${ABSDIR}/profile.sh
+REPOSITORY=/home/ubuntu/sparta/deploy
 
-CURRENT_PORT=$(cat /home/ubuntu/service_url.inc | grep -Po '[0-9]+' | tail -1)
-TARGET_PORT=0
+echo "> Build 파일 복사"
+echo "> cp $REPOSITORY/*.jar $REPOSITORY/"
 
-echo "> Current port of running WAS is ${CURRENT_PORT}."
+cp $REPOSITORY/*.jar $REPOSITORY/
 
-if [ ${CURRENT_PORT} -eq 8081 ]; then
-  TARGET_PORT=8082
-elif [ ${CURRENT_PORT} -eq 8082 ]; then
-  TARGET_PORT=8081
-else
-  echo "> No WAS is connected to nginx"
-fi
+echo "> 새 어플리케이션 배포"
+JAR_NAME=$(ls -tr $REPOSITORY/*.jar | head -n 1)
 
-TARGET_PID=$(lsof -Fp -i TCP:${TARGET_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
+echo "> JAR Name: $JAR_NAME"
 
-if [ ! -z ${TARGET_PID} ]; then
-  echo "> Kill WAS running at ${TARGET_PORT}."
-  sudo kill ${TARGET_PID}
-fi
+echo "> $JAR_NAME 에 실행권한 추가"
 
-nohup java -jar -Dserver.port=${TARGET_PORT} /home/ubuntu/Ossack/build/libs/* > /home/ubuntu/nohup.out 2>&1 &
-echo "> Now new WAS runs at ${TARGET_PORT}."
-exit 0
+chmod +x $JAR_NAME
+
+echo "> $JAR_NAME 실행"
+
+IDLE_PROFILE=$(find_idle_profile)
+
+echo "> $JAR_NAME 를 profile=$IDLE_PROFILE 로 실행합니다."
+
+nohup java -jar \
+    -Dspring.config.location=classpath:/application.yml,classpath:/application-${IDLE_PROFILE}.properties \
+    -Dspring.profiles.active=${IDLE_PROFILE} \
+    -Djasypt.encryptor.password=${JASYPT_ENCRYPTOR_PASSWORD} \
+    ${JAR_NAME} > ${REPOSITORY}/nohup.out 2>&1 &
