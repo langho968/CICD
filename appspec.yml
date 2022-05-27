@@ -13,15 +13,11 @@ permissions:
 
 ## 새로 추가한 부분 ###
 hooks:
-  ApplicationStart:
-    - location: stop.sh
+  BeforeInstall:
+    - location: beforeInstall.sh
       timeout: 60
       runas: ubuntu
-
-    - location: start.sh
-      timeout: 100
-      runas: ubuntu
-
-    - location: health_check.sh
+  AfterInstall:
+    - location: deploy.sh
       timeout: 60
       runas: ubuntu
