@@ -1,8 +1,8 @@
 version: 0.0
 os: linux
 files:
-  - source: / # CodeDeploy에서 전달해 준 파일 중 destination으로 이동시킬 대상 지정 ('/' 루트 파일은 전체파일을 의미)
-    destination: /home/ubuntu/hanghae/deploy # source에서 지정된 파일을 받을 위치
+  - source:  /
+    destination: /home/ubuntu/action
     overwrite: yes
 
 permissions:
@@ -11,17 +11,8 @@ permissions:
     owner: ubuntu
     group: ubuntu
 
-## 새로 추가한 부분 ###
 hooks:
   ApplicationStart:
-    - location: stop.sh
-      timeout: 60
-      runas: ubuntu
-
-    - location: start.sh
-      timeout: 100
-      runas: ubuntu
-
-    - location: health_check.sh
+    - location: deploy.sh
       timeout: 60
       runas: ubuntu
