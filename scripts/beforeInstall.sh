@@ -5,4 +5,4 @@ REPOSITORY=/home/ubuntu/
 if [ -d $REPOSITORY/action ]; then
     rm -rf $REPOSITORY/action
 fi
-mkdir -vp $REPOSITORY/actiond
+mkdir -vp $REPOSITORY/action
