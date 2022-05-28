@@ -1,19 +1,14 @@
-#version: 0.0
-#os: linux
-#files:
-#  - source:  /
-#    destination: /home/ubuntu/action
-#    overwrite: yes
-#
-#permissions:
-#  - object: /
-#    pattern: "**"
-#    owner: ubuntu
-#    group: ubuntu
-#    mode: 755
-#
-#hooks:
-#  ApplicationStart:
-#    - location: deploy.sh
-#      timeout: 60
-#      runas: ubuntu
+# appspec.yml
+
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/springboot-intro-build/ # 프로젝트 이름
+    overwrite: yes
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
